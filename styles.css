@@ -22,9 +22,11 @@ body {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
     max-width: 100%;
     margin: 0 auto;
-    padding: 30px 10px 10px 10px;
+    padding: 30px 10px 20px 10px;
     width: 100%;
     height: 100vh;
     background-color: #121212;
@@ -100,10 +102,10 @@ h1, h2 {
 
 .display-box {
     background-color: #1e1e1e;
-    border: 1px solid #33;
+    border: 1px solid #333;
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
     text-align: center;
 }
 
@@ -130,30 +132,30 @@ h1, h2 {
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    gap: 10px;
     padding: 0 5px;
     justify-items: center;
     width: 100%;
     max-width: 360px;
     margin: 0 auto;
+    flex-grow: 1;
 }
 
 .option-btn {
-    padding: 8px 6px;
+    padding: 8px;
     background-color: #2d2d2d;
     color: #fff;
     border: 1px solid #404040;
     border-radius: 8px;
     cursor: pointer;
-    height: 50px;
-    width: 130px;
+    height: 70px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
     font-family: 'Courier New', monospace;
     letter-spacing: 2px;
-    white-space: nowrap;
     transition: all 0.15s ease;
 }
 
@@ -163,7 +165,7 @@ h1, h2 {
 
 .score-box {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 10px;
 }
 
@@ -227,8 +229,10 @@ h1, h2 {
         border-radius: 40px;
         position: relative;
         border: 1px solid #333;
-        padding: 30px 15px 10px 15px;
+        padding: 30px 15px 20px 15px;
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
     }
 
     /* Remove the notch styling since we're going for a simpler look */

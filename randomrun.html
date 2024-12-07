@@ -74,6 +74,14 @@
             padding: 15px;
             margin-top: 20px;
             display: none;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .letter-select.visible {
@@ -82,9 +90,8 @@
 
         .letter-checkbox-container {
             display: grid;
-            grid-auto-flow: column;
-            grid-template-rows: repeat(12, auto);
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(9, auto);
             gap: 10px;
             margin-top: 10px;
         }
@@ -132,14 +139,16 @@
     </div>
 
     <script>
-        const initialLetters = ['E', 'T', 'I', '5', 'M'];
+        const initialLetters = ['E', 'T', 'I', 'M', 'A', '5', '0'];
         const allLetters = [
-            // Column 1
-            'E', 'T', 'I', 'M', 'A', 'N', 'O', 'S', 'R', 'H', 'L', 'D',
-            // Column 2
-            'C', 'U', 'P', 'F', 'B', 'W', 'Y', 'G', 'V', 'K', 'J', 'X',
-            // Column 3 (with Q, Z and numbers)
-            'Q', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+            // Column 1 - Most common letters (ETIMA)
+            'E', 'T', 'I', 'M', 'A', 'N', 'S', 'O', 'R',
+            // Column 2 - Common letters
+            'H', 'D', 'L', 'U', 'C', 'W', 'F', 'G', 'Y',
+            // Column 3 - Less common letters
+            'P', 'B', 'V', 'K', 'J', 'X', 'Q', 'Z', '0',
+            // Column 4 - Numbers in order (1-9)
+            '1', '2', '3', '4', '5', '6', '7', '8', '9'
         ];
         
         let activeLetters = new Set(initialLetters);
@@ -157,6 +166,15 @@
         // Create the letter buttons for the grid
         function createLetterButtons() {
             letterGrid.innerHTML = '';
+            
+            // Add underscore button for space first
+            const spaceBtn = document.createElement('button');
+            spaceBtn.className = 'letter-btn';
+            spaceBtn.textContent = '_';
+            spaceBtn.onclick = () => addLetter(' ');
+            letterGrid.appendChild(spaceBtn);
+
+            // Then add all other active letters
             activeLetters.forEach(letter => {
                 const btn = document.createElement('button');
                 btn.className = 'letter-btn';
@@ -164,39 +182,41 @@
                 btn.onclick = () => addLetter(letter);
                 letterGrid.appendChild(btn);
             });
-
-            // Add underscore button for space
-            const spaceBtn = document.createElement('button');
-            spaceBtn.className = 'letter-btn';
-            spaceBtn.textContent = '_';
-            spaceBtn.onclick = () => addLetter(' ');
-            letterGrid.appendChild(spaceBtn);
         }
 
-        // Create checkboxes for all available letters
+        // Create checkboxes for all available letters - Modified for vertical arrangement
         function createLetterCheckboxes() {
             letterSelect.innerHTML = '<h3>Available Letters</h3>';
             const container = document.createElement('div');
             container.className = 'letter-checkbox-container';
             
-            allLetters.forEach(letter => {
-                const div = document.createElement('div');
-                div.className = 'letter-checkbox';
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `check-${letter}`;
-                checkbox.checked = activeLetters.has(letter);
-                checkbox.onchange = () => toggleLetter(letter);
-                
-                const label = document.createElement('label');
-                label.htmlFor = `check-${letter}`;
-                label.textContent = letter;
-                
-                div.appendChild(checkbox);
-                div.appendChild(label);
-                container.appendChild(div);
-            });
+            const rows = 9;
+            const cols = 4;
+            
+            // Create grid reading down columns first
+            for(let row = 0; row < rows; row++) {
+                for(let col = 0; col < cols; col++) {
+                    const index = col * rows + row;
+                    if (index < allLetters.length && allLetters[index] !== ' ') {
+                        const div = document.createElement('div');
+                        div.className = 'letter-checkbox';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `check-${allLetters[index]}`;
+                        checkbox.checked = activeLetters.has(allLetters[index]);
+                        checkbox.onchange = () => toggleLetter(allLetters[index]);
+                        
+                        const label = document.createElement('label');
+                        label.htmlFor = `check-${allLetters[index]}`;
+                        label.textContent = allLetters[index];
+                        
+                        div.appendChild(checkbox);
+                        div.appendChild(label);
+                        container.appendChild(div);
+                    }
+                }
+            }
             
             letterSelect.appendChild(container);
         }
