@@ -30,6 +30,7 @@
             font-family: Consolas, "Liberation Mono", "DejaVu Sans Mono", Monaco, monospace;
             resize: none;
             letter-spacing: 0.2em;
+            caret-color: transparent;
         }
 
         .controls {
@@ -96,6 +97,10 @@
         .letter-checkbox input[type="checkbox"] {
             width: 18px;
             height: 18px;
+        }
+
+        .space-char {
+            color: #404040;
         }
     </style>
 </head>
@@ -202,7 +207,14 @@
 
         // Add letter to practice text
         function addLetter(letter) {
-            practiceText.value += letter;
+            if (letter === ' ') {
+                const span = document.createElement('span');
+                span.className = 'space-char';
+                span.textContent = '_';
+                practiceText.value = practiceText.value + '_';
+            } else {
+                practiceText.value += letter;
+            }
         }
 
         // Clear practice text
