@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Flash - Random Run Check</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+        .practice-area {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            height: 45vh;
+        }
+
+        #practiceText {
+            width: 100%;
+            height: calc(100% - 60px);
+            background-color: #2d2d2d;
+            color: #fff;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 2.5rem;
+            line-height: 1.4;
+            font-family: Consolas, "Liberation Mono", "DejaVu Sans Mono", Monaco, monospace;
+            resize: none;
+            letter-spacing: 0.2em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .letter-btn {
+            padding: 12px 8px;
+            font-size: 1.2rem;
+            background-color: #2d2d2d;
+            color: #fff;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .settings-btn {
+            background-color: #2d2d2d;
+            color: #fff;
+            border: 1px solid #404040;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .letter-select {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .letter-select.visible {
+            display: block;
+        }
+
+        .letter-checkbox-container {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(12, auto);
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .letter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+
+        .letter-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-btn">←</a>
+            <h2>Random Run Check</h2>
+        </header>
+
+        <div class="practice-area">
+            <textarea id="practiceText" readonly placeholder="Random Run"></textarea>
+            <div class="controls">
+                <button id="clearBtn" class="settings-btn">Clear</button>
+                <button id="settingsBtn" class="settings-btn">Letter Settings</button>
+            </div>
+        </div>
+
+        <div class="letter-grid" id="letterGrid">
+            <!-- Letter buttons will be inserted by JS -->
+        </div>
+
+        <div class="letter-select" id="letterSelect">
+            <h3>Available Letters</h3>
+            <!-- Checkboxes will be inserted by JS -->
+        </div>
+    </div>
+
+    <script>
+        const initialLetters = ['E', 'T', 'I', '5', 'M'];
+        const allLetters = [
+            // Column 1
+            'E', 'T', 'I', 'M', 'A', 'N', 'O', 'S', 'R', 'H', 'L', 'D',
+            // Column 2
+            'C', 'U', 'P', 'F', 'B', 'W', 'Y', 'G', 'V', 'K', 'J', 'X',
+            // Column 3 (with Q, Z and numbers)
+            'Q', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+        ];
+        
+        let activeLetters = new Set(initialLetters);
+        const practiceText = document.getElementById('practiceText');
+        const letterGrid = document.getElementById('letterGrid');
+        const letterSelect = document.getElementById('letterSelect');
+        
+        // Initialize the page
+        function init() {
+            createLetterButtons();
+            createLetterCheckboxes();
+            setupEventListeners();
+        }
+
+        // Create the letter buttons for the grid
+        function createLetterButtons() {
+            letterGrid.innerHTML = '';
+            activeLetters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'letter-btn';
+                btn.textContent = letter;
+                btn.onclick = () => addLetter(letter);
+                letterGrid.appendChild(btn);
+            });
+
+            // Add underscore button for space
+            const spaceBtn = document.createElement('button');
+            spaceBtn.className = 'letter-btn';
+            spaceBtn.textContent = '_';
+            spaceBtn.onclick = () => addLetter(' ');
+            letterGrid.appendChild(spaceBtn);
+        }
+
+        // Create checkboxes for all available letters
+        function createLetterCheckboxes() {
+            letterSelect.innerHTML = '<h3>Available Letters</h3>';
+            const container = document.createElement('div');
+            container.className = 'letter-checkbox-container';
+            
+            allLetters.forEach(letter => {
+                const div = document.createElement('div');
+                div.className = 'letter-checkbox';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `check-${letter}`;
+                checkbox.checked = activeLetters.has(letter);
+                checkbox.onchange = () => toggleLetter(letter);
+                
+                const label = document.createElement('label');
+                label.htmlFor = `check-${letter}`;
+                label.textContent = letter;
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                container.appendChild(div);
+            });
+            
+            letterSelect.appendChild(container);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('clearBtn').onclick = clearText;
+            document.getElementById('settingsBtn').onclick = toggleSettings;
+        }
+
+        // Add letter to practice text
+        function addLetter(letter) {
+            practiceText.value += letter;
+        }
+
+        // Clear practice text
+        function clearText() {
+            practiceText.value = '';
+        }
+
+        // Toggle settings panel
+        function toggleSettings() {
+            letterSelect.classList.toggle('visible');
+        }
+
+        // Toggle letter availability
+        function toggleLetter(letter) {
+            if (activeLetters.has(letter)) {
+                activeLetters.delete(letter);
+            } else {
+                activeLetters.add(letter);
+            }
+            createLetterButtons();
+        }
+
+        // Initialize the page when loaded
+        init();
+    </script>
+</body>
+</html> 

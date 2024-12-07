@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    min-height: 100vh;
+    color: #e0e0e0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+h1, h2 {
+    color: #ffffff;
+}
+
+.main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-btn {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #2196F3;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:active {
+    background-color: #1976D2;
+}
+
+.back-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.morse-display {
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    border: 1px solid #333333;
+}
+
+.morse-pattern {
+    font-size: 3rem;
+    text-align: center;
+    letter-spacing: 12px;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+}
+
+.morse-dot {
+    display: inline-block;
+    content: "•";
+}
+
+.morse-dash {
+    display: inline-block;
+    content: "─";
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.option-btn {
+    padding: 20px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #2d2d2d;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: 1px solid #404040;
+}
+
+.option-btn:active {
+    background-color: #404040;
+}
+
+.score {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.correct {
+    background-color: #1b5e20 !important;
+    color: white !important;
+    border-color: #2e7d32 !important;
+}
+
+.incorrect {
+    background-color: #b71c1c !important;
+    color: white !important;
+    border-color: #c62828 !important;
+}
+
+.nav-btn:hover, .option-btn:hover {
+    filter: brightness(1.1);
+}
+
+.option-btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+} 
