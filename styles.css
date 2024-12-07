@@ -6,15 +6,28 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #121212;
+    background-color: #080808;
     min-height: 100vh;
     color: #e0e0e0;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 30px 10px 10px 10px;
+    width: 100%;
+    height: 100vh;
+    background-color: #121212;
 }
 
 header {
@@ -85,27 +98,73 @@ h1, h2 {
     content: "─";
 }
 
+.display-box {
+    background-color: #1e1e1e;
+    border: 1px solid #33;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.current-letter {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    transition: color 0.3s ease;
+}
+
+.current-letter.correct {
+    color: #00e676;
+    transform: scale(1.1);
+    transition: all 0.15s ease;
+}
+
+.current-letter.incorrect {
+    color: #ff1744;
+    transform: scale(1.1);
+    transition: all 0.15s ease;
+}
+
 .options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 6px;
+    padding: 0 5px;
+    justify-items: center;
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
 }
 
 .option-btn {
-    padding: 20px;
-    font-size: 1.5rem;
-    border: none;
-    border-radius: 8px;
+    padding: 8px 6px;
     background-color: #2d2d2d;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    color: #fff;
     border: 1px solid #404040;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 50px;
+    width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    transition: all 0.15s ease;
 }
 
 .option-btn:active {
     background-color: #404040;
+}
+
+.score-box {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
 }
 
 .score {
@@ -115,15 +174,17 @@ h1, h2 {
 }
 
 .correct {
-    background-color: #1b5e20 !important;
-    color: white !important;
-    border-color: #2e7d32 !important;
+    background-color: #00c853 !important;
+    border-color: #00e676 !important;
+    color: #ffffff !important;
+    transform: scale(1.02);
 }
 
 .incorrect {
-    background-color: #b71c1c !important;
-    color: white !important;
-    border-color: #c62828 !important;
+    background-color: #ff1744 !important;
+    border-color: #ff4081 !important;
+    color: #ffffff !important;
+    transform: scale(1.02);
 }
 
 .nav-btn:hover, .option-btn:hover {
@@ -133,4 +194,123 @@ h1, h2 {
 .option-btn:disabled {
     opacity: 0.7;
     cursor: default;
-} 
+}
+
+.morse-symbol {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+.dash {
+    width: 36px;
+    height: 12px;
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Morsecode&display=swap');
+
+/* Add media query for larger screens */
+@media (min-width: 768px) {
+    .container {
+        max-width: 390px;
+        height: 844px;
+        margin: 20px auto;
+        border-radius: 40px;
+        position: relative;
+        border: 1px solid #333;
+        padding: 30px 15px 10px 15px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Remove the notch styling since we're going for a simpler look */
+    .container::before {
+        display: none;
+    }
+}
+
+.score-history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 300px;
+    margin: 10px auto;
+    justify-content: center;
+}
+
+.history-mark {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.history-mark.correct {
+    background-color: #00e676;  /* Matching our feedback green */
+}
+
+.history-mark.incorrect {
+    background-color: #ff1744;  /* Matching our feedback red */
+    border-radius: 0;
+    width: 24px;  /* Make dashes wider */
+}
+
+/* Ensure the score history doesn't push content below viewport */
+@media (max-height: 700px) {
+    .score-history {
+        max-height: 80px;
+        overflow-y: hidden;
+    }
+}
+
+.reset-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.reset-btn:active {
+    color: #2196F3;
+}
+
+/* Adjust the history marks when they're in buttons */
+.option-btn .history-mark {
+    width: 12px;
+    height: 12px;
+    opacity: 0.9;
+}
+
+.option-btn .history-mark.incorrect {
+    width: 24px;
+}
+
+.option-btn:hover .history-mark {
+    opacity: 1;
+}
+
+/* Remove any margin/padding that might affect alignment */
+.option-btn .morse-symbol {
+    margin: 0;
+    padding: 0;
+    height: 12px;
+}
+
+/* Add specific spacing for dashes */
+.option-btn span.dash {
+    letter-spacing: 4px;  /* Keep original spacing for dashes */
+}

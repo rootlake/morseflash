@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Morse Flash - Letter Check</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-btn">←</a>
+            <h2>What's The Morse Code?</h2>
+            <button onclick="resetGame()" class="reset-btn">↺</button>
+        </header>
+
+        <div class="display-box">
+            <div class="current-letter" id="currentLetter">
+                A
+            </div>
+        </div>
+
+        <div class="options-grid" id="morseOptions">
+            <!-- Options will be inserted by JS -->
+        </div>
+
+        <div class="score-box">
+            <div class="score">Score: <span id="scoreDisplay">0</span></div>
+            <div class="score-history" id="scoreHistory"></div>
+        </div>
+    </div>
+    <script src="letter-check.js"></script>
+</body>
+</html> 
