@@ -139,7 +139,7 @@
     </div>
 
     <script>
-        const initialLetters = ['E', 'T', 'I', 'M', 'A', '5', '0'];
+        const initialLetters = ['E', 'T', 'I', 'M', 'A', '5'];
         const allLetters = [
             // Column 1 - Most common letters (ETIMA)
             'E', 'T', 'I', 'M', 'A', 'N', 'S', 'O', 'R',
@@ -158,6 +158,7 @@
         
         // Initialize the page
         function init() {
+            loadSavedLetters();
             createLetterButtons();
             createLetterCheckboxes();
             setupEventListeners();
@@ -225,6 +226,14 @@
         function setupEventListeners() {
             document.getElementById('clearBtn').onclick = clearText;
             document.getElementById('settingsBtn').onclick = toggleSettings;
+            
+            // Add click-outside handling
+            document.addEventListener('click', (event) => {
+                if (!letterSelect.contains(event.target) && 
+                    !document.getElementById('settingsBtn').contains(event.target)) {
+                    letterSelect.classList.remove('visible');
+                }
+            });
         }
 
         // Add letter to practice text
@@ -257,6 +266,22 @@
                 activeLetters.add(letter);
             }
             createLetterButtons();
+            saveActiveLetters(); // Save after each change
+        }
+
+        // Load saved letters
+        function loadSavedLetters() {
+            const saved = localStorage.getItem('activeLetters');
+            if (saved) {
+                activeLetters = new Set(JSON.parse(saved));
+            } else {
+                activeLetters = new Set(initialLetters);
+            }
+        }
+
+        // Save active letters
+        function saveActiveLetters() {
+            localStorage.setItem('activeLetters', JSON.stringify([...activeLetters]));
         }
 
         // Initialize the page when loaded
